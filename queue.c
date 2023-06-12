@@ -41,18 +41,30 @@ int queue_add(void *new_object, queue_object *queue)
 void *queue_poll(queue_object *queue)
 {
     // re-initilizise queue
-    queue = front;
-    if (queue == NULL || front == NULL)
+    // queue = front;
+    if (queue == NULL || queue->object == NULL)
     {
-
         return NULL;
     }
+
+    if (front == NULL)
+    {
+        return NULL;
+    }
+
     // create temp variable to get and delete the node of the oldest element in the list
-    queue_object *temp = queue;
+    queue_object *temp = NULL;
+    void *object = NULL;
+    temp = front;
     front = queue->next;
-    void *object = temp->object;
+    object = temp->object;
 
     free(temp);
+    if (front != NULL)
+    {
+        *queue = *front;
+    }
+
     return object;
 }
 
@@ -60,6 +72,7 @@ queue_object *new_queue()
 {
     // create new queue
     queue_object *objnode = (queue_object *)malloc(sizeof(queue_object));
+    objnode->object = NULL;
     objnode->next = NULL;
     return objnode;
 }
@@ -67,28 +80,27 @@ queue_object *new_queue()
 void free_queue(queue_object *queue)
 {
 
-    queue_object *current = queue;
-    while (current != NULL)
+    // queue_object *current = queue;
+    while (queue != NULL)
     {
-        queue_object *next = current->next;
-        free(current);
-        current = next;
+        queue_object *current = queue;
+        queue = queue->next;
+        if (current->object != NULL)
+        {
+            free(current);
+        }
     }
+    free(queue);
 }
 
 void *queue_peek(queue_object *queue)
 {
-    // peek at the oldest element
-    void *object = queue->object;
-    if (queue->object == NULL || queue == NULL)
-    {
 
-        return NULL;
-    }
     if (front == NULL)
     {
-        object = front->object;
+        return NULL;
     }
 
+    void *object = queue->object;
     return object;
 }
