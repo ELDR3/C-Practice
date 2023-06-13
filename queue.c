@@ -17,14 +17,18 @@ int queue_add(void *new_object, queue_object *queue)
     new_node->next = NULL;
 
     // first initilisation of queue node and front
-    if (queue->object == NULL)
+    if (front == NULL) // queue->object == NULL
     {
-        *queue = *new_node;
+        //*queue = *new_node;
         front = queue;
+        front->object = new_node->object;
+        front->next = new_node->next;
     }
     else
     {
         // add new nodes to the end of the list
+        queue->object = front->object;
+        queue->next = front->next;
         queue_object *listend = queue;
 
         while (listend->next != NULL)
@@ -42,16 +46,18 @@ void *queue_poll(queue_object *queue)
 {
     // re-initilizise queue
     // queue = front;
-    if (queue == NULL || queue->object == NULL)
+    if (front == NULL || front->object == NULL)
     {
         return NULL;
     }
 
-    if (front == NULL)
+    /*if (front == NULL)
     {
         return NULL;
-    }
+    }*/
 
+    queue->object = front->object;
+    queue->next = front->next;
     // create temp variable to get and delete the node of the oldest element in the list
     queue_object *temp = NULL;
     void *object = NULL;
@@ -60,10 +66,14 @@ void *queue_poll(queue_object *queue)
     object = temp->object;
 
     free(temp);
-    if (front != NULL)
+    /*if (front != NULL)
     {
         *queue = *front;
     }
+    else
+    {
+        queue->next = NULL;
+    }*/
 
     return object;
 }
@@ -81,6 +91,7 @@ void free_queue(queue_object *queue)
 {
 
     // queue_object *current = queue;
+    queue = front;
     while (queue != NULL)
     {
         queue_object *current = queue;
