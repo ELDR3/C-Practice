@@ -38,7 +38,7 @@ int queue_add(void *new_object, queue_object *queue)
 
         listend->next = new_node;
     }
-    // free(new_node);
+    free(new_node);
     return 0;
 }
 
