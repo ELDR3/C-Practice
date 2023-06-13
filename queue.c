@@ -90,7 +90,6 @@ void free_queue(queue_object *queue)
             free(current);
         }
     }
-    free(queue);
 }
 
 void *queue_peek(queue_object *queue)
